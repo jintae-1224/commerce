@@ -18,6 +18,7 @@ export default function Home() {
     {
       id: string
       name: string
+      createdAt: string
     }[]
   >([])
 
@@ -85,7 +86,12 @@ export default function Home() {
                 </>
               ))} */}
             {products &&
-              products.map((item) => <div key={item.id}>{item.name}</div>)}
+              products.map((item) => (
+                <div key={item.id}>
+                  {item.name}
+                  <span>{item.createdAt}</span>
+                </div>
+              ))}
           </div>
         </div>
 
