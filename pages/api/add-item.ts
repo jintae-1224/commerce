@@ -2,10 +2,10 @@ import { Client } from '@notionhq/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const notion = new Client({
-  auth: 'your secret Key',
+  auth: process.env.AUTH,
 })
 
-const databaseId = 'your database ID'
+const databaseId = String(process.env.DATABASEID)
 
 async function addItem(name: string) {
   try {
