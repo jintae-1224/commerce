@@ -4,6 +4,7 @@ import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/react'
+import Button from '@components/Button'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -77,6 +78,7 @@ export default function Home() {
           >
             Add Jacket
           </button>
+          <Button onClick={handleClick}>Add Jacket2</Button>
           <div>
             <p>Product List</p>
             {/* {products &&
