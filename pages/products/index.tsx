@@ -35,6 +35,8 @@ export default function Products() {
                 src={item.image_url ?? ''}
                 width={300}
                 height={200}
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mPc+goAAloBoUbay2UAAAAASUVORK5CYII="
               />
               <div className="flex">
                 <span>{item.name}</span>
