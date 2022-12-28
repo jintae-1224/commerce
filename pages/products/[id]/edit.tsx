@@ -1,10 +1,9 @@
-// import ImageGallery from 'react-image-gallery'
-
 import CustomEditor from '@components/Editor'
-import Head from 'next/head'
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Carousel from 'nuka-carousel/lib/carousel'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const images = [
   {
@@ -52,6 +51,46 @@ const images = [
 export default function Products() {
   // return <ImageGallery items={images} />
   const [index, setIndex] = useState<number>(0)
+  const router = useRouter()
+  const { id: productId } = router.query
+  const [editorState, setEditorState] = useState<EditorState | undefined>(
+    undefined
+  )
+
+  useEffect(() => {
+    if (productId != null) {
+      fetch(`/api/get-product?id=${productId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.item.contents) {
+            setEditorState(
+              EditorState.createWithContent(
+                convertFromRaw(JSON.parse(data.item.contents))
+              )
+            )
+          } else {
+            setEditorState(EditorState.createEmpty())
+          }
+        })
+    }
+  }, [productId])
+
+  const handleSave = () => {
+    if (editorState) {
+      fetch(`/api/update-product`, {
+        method: 'POST',
+        body: JSON.stringify({
+          id: productId,
+          contents: JSON.stringify(
+            convertToRaw(editorState.getCurrentContent())
+          ),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => alert('Success'))
+    }
+  }
+
   return (
     <>
       <div style={{ width: '500px' }}>
@@ -88,7 +127,13 @@ export default function Products() {
           ))}
         </div>
       </div>
-      <CustomEditor />
+      {editorState != null && (
+        <CustomEditor
+          editorState={editorState}
+          onEditorStateChange={setEditorState}
+          onSave={handleSave}
+        />
+      )}
     </>
   )
 }
